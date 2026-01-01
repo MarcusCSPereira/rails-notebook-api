@@ -1,0 +1,12 @@
+'pt-BR':
+  activerecord:
+    models:
+      contact: Contato
+      kind: Tipo
+    attributes:
+      contact:
+        name: Nome
+        email: Email
+        birthdate: Data de Nascimento
+      kind:
+        description: Descrição
