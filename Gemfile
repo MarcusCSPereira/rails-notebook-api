@@ -51,6 +51,8 @@ group :development, :test do
 
   gem "pry-rails"
 
+  gem "foreman"
+
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
