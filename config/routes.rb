@@ -1,6 +1,16 @@
 Rails.application.routes.draw do
   resources :kinds
-  resources :contacts
+  resources :contacts do
+    resource :kind, only: [ :show ]
+    get "relationships/kind", to: "kinds#show"
+
+    resources :phones, only: [ :index, :show ]
+    resource :phone, only: [ :create, :update, :destroy ]
+    get "relationships/phones", to: "phones#index"
+
+    resource :address, only: [ :show, :update, :create, :destroy ]
+    get "relationships/address", to: "addresses#show"
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

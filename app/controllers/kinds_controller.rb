@@ -9,6 +9,8 @@ class KindsController < ApplicationController
   end
 
   # GET /kinds/1
+  # GET /contacts/:contact_id/kind
+  # GET /contacts/:contact_id/relationships/kind
   def show
     render json: @kind
   end
@@ -41,7 +43,11 @@ class KindsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_kind
-      @kind = Kind.find(params.expect(:id))
+      if params[:contact_id]
+        @kind = Contact.find(params[:contact_id]).kind
+      elsif params[:id]
+        @kind = Kind.find(params[:id])
+      end
     end
 
     # Only allow a list of trusted parameters through.

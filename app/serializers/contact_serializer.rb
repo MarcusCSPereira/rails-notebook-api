@@ -1,12 +1,21 @@
 class ContactSerializer < ActiveModel::Serializer
   attributes :id, :name, :email, :birthdate
 
-  # Associations
+  # Associations with Hateoas
   belongs_to :kind, optional: true do
-    link(:related) { kind_url(object.kind.id) }
+    link(:self) { contact_relationships_kind_url(object.id) }
+    link(:related) { contact_kind_url(object.id) }
   end
-  has_many :phones
-  has_one :address, inverse_of: :contact
+
+  has_many :phones do
+    link(:self) { contact_relationships_phones_url(object.id) }
+    link(:related) { contact_phones_url(object.id) }
+  end
+
+  has_one :address, inverse_of: :contact do
+    link(:self) { contact_relationships_address_url(object.id) }
+    link(:related) { contact_address_url(object.id) }
+  end
 
   # Hateoas
   # link(:self) { contact_url(object) }

@@ -1,5 +1,5 @@
-class AddressSerializer < ActiveModel::Serializer
-  attributes :id, :street, :city
+class PhoneSerializer < ActiveModel::Serializer
+  attributes :id, :number
 
   # Associations
   belongs_to :contact do
