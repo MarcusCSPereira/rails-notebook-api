@@ -1,5 +1,9 @@
 class KindsController < ApplicationController
+  # TOKEN = ENV.fetch("SECRET_KEY_BASE")
+  # include ActionController::HttpAuthentication::Token::ControllerMethods
+
   before_action :set_kind, only: %i[ show update destroy ]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy, :index, :show ]
 
   # GET /kinds
   def index
@@ -54,4 +58,15 @@ class KindsController < ApplicationController
     def kind_params
       params.expect(kind: [ :description ])
     end
+
+    # def authenticate
+    #   authenticate_or_request_with_http_token do |token, options|
+    #     hmac_secret = ENV.fetch("SECRET_KEY_BASE")
+    #     begin
+    #       JWT.decode token, hmac_secret, true, { algorithm: "HS256" }
+    #     rescue JWT::DecodeError
+    #       head :unauthorized
+    #     end
+    #   end
+    # end
 end
