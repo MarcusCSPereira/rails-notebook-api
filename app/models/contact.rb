@@ -7,6 +7,9 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :phones, allow_destroy: true
   accepts_nested_attributes_for :address, update_only: true
 
+  # Kaminari pagination
+  paginates_per 5
+
   # def age
   #   (Date.today - birthdate).to_i / 365
   # end

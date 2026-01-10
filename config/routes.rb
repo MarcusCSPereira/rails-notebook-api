@@ -1,16 +1,33 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for "User", at: "auth"
   resources :kinds
-  resources :contacts do
-    resource :kind, only: [ :show ]
-    get "relationships/kind", to: "kinds#show"
 
-    resources :phones, only: [ :index, :show ]
-    resource :phone, only: [ :create, :update, :destroy ]
-    get "relationships/phones", to: "phones#index"
+  api_version(module: "V1", path: { value: "v1" }) do
+    resources :contacts do
+      resource :kind, only: [ :show ]
+      get "relationships/kind", to: "kinds#show"
 
-    resource :address, only: [ :show, :update, :create, :destroy ]
-    get "relationships/address", to: "addresses#show"
+      resources :phones, only: [ :index, :show ]
+      resource :phone, only: [ :create, :update, :destroy ]
+      get "relationships/phones", to: "phones#index"
+
+      resource :address, only: [ :show, :update, :create, :destroy ]
+      get "relationships/address", to: "addresses#show"
+    end
+  end
+
+  api_version(module: "V2", path: { value: "v2" }) do
+    resources :contacts do
+      resource :kind, only: [ :show ]
+      get "relationships/kind", to: "kinds#show"
+
+      resources :phones, only: [ :index, :show ]
+      resource :phone, only: [ :create, :update, :destroy ]
+      get "relationships/phones", to: "phones#index"
+
+      resource :address, only: [ :show, :update, :create, :destroy ]
+      get "relationships/address", to: "addresses#show"
+    end
   end
 
   resources :auths, only: [ :create ]
@@ -18,7 +35,7 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "up", to: "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
   # root "posts#index"
