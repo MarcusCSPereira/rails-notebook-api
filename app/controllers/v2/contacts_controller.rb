@@ -1,12 +1,17 @@
 module V2
   class ContactsController < ApplicationController
+    include ErrorSerializer
     before_action :set_contact, only: %i[ show update destroy ]
 
     # GET /contacts
     def index
       @contacts = Contact.includes(:kind, :phones, :address).all
 
-      render json: @contacts
+      # Cache Configuration
+      expires_in 30.seconds, public: true
+      if stale?(etag: @contacts, last_modified: @contacts.maximum(:updated_at))
+        render json: @contacts
+      end
     end
 
     # GET /contacts/1
@@ -21,7 +26,7 @@ module V2
       if @contact.save
         render json: @contact, status: :created, location: @contact
       else
-        render json: @contact.errors, status: :unprocessable_content
+        render json: ErrorSerializer.serialize(@contact.errors), status: :unprocessable_content
       end
     end
 
@@ -30,7 +35,7 @@ module V2
       if @contact.update(contact_params)
         render json: @contact
       else
-        render json: @contact.errors, status: :unprocessable_content
+        render json: ErrorSerializer.serialize(@contact.errors), status: :unprocessable_content
       end
     end
 
