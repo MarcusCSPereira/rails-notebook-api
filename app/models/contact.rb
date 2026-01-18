@@ -1,6 +1,6 @@
 class Contact < ApplicationRecord
   validates :kind, presence: true
-  validates :address, presence: true
+  # validates :address, presence: true
 
   # Associations
   belongs_to :kind, optional: true

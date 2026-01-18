@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for "User", at: "auth"
+  # Silencia warnings de deprecation do devise_token_auth (aguardando atualização da gem)
+  Rails.application.deprecators.silence do
+    mount_devise_token_auth_for "User", at: "auth"
+  end
   resources :kinds
 
-  api_version(module: "V1", path: { value: "v1" }) do
+  namespace :v1 do
     resources :contacts do
       resource :kind, only: [ :show ]
       get "relationships/kind", to: "kinds#show"
@@ -16,7 +19,7 @@ Rails.application.routes.draw do
     end
   end
 
-  api_version(module: "V2", path: { value: "v2" }) do
+  namespace :v2 do
     resources :contacts do
       resource :kind, only: [ :show ]
       get "relationships/kind", to: "kinds#show"
